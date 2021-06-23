@@ -39,39 +39,50 @@ def makeNewParagraph(paragraphList, wordTypeDict):
                             nextWordDict[prevWord].pop(trialWord,None)
                             foundWord = True
                 iterCount += 1
-            
         if startQuote == True and quoteSpaceRemoved == False:
             newParagraph = newParagraph[:len(newParagraph)-1]
             quoteSpaceRemoved = True
+            newSentence = True
         if newSentence == True:
             newWord = newWord.capitalize()
             newSentence = False
         if word in [",",".","!","?",'"',"'"]:
-            newParagraph = newParagraph[:len(newParagraph)-1] + newWord + " "
-
-            if word in [".", "!",'?']:
-                newSentence = True
-            if word == '"':   
-                if startQuote == False:
-                    startQuote = True
-                    quoteSpaceRemoved = False
-                    newSentence = True
-                else:
-                    startQuote = False
-            if newWord in ['“']:
+            newWord = word
+            newParagragh = newParagraph[:len(newParagraph)-1]
+            if newWord == '"':
                 startQuote = True
-        else:
-           newParagraph = newParagraph + newWord + " "
-        
-            
+                quoteSpaceRemoved = False
+
 
             
+#        if startQuote == True and quoteSpaceRemoved == False:
+#            newParagraph = newParagraph[:len(newParagraph)-1]
+#            print(1)
+#            quoteSpaceRemoved = True
+#            print(2)
 
+#            if word in [".", "!",'?']:
+#                newSentence = True
+#            if word == '"':   
+#                if startQuote == False:
+#                    startQuote = True
+#                    quoteSpaceRemoved = False
+#                    newSentence = True
+#                else:
+#                    startQuote = False
+#            if newWord in ['“']:
+#                startQuote = True
+#        else:
+#           newParagraph = newParagraph + newWord + " "
+#        
+        newParagraph += newWord + " "
         prevWord = newWord.lower()
+        
 
         
-    if startQuote == True:
-        newParagraph = newParagraph[:len(newParagraph)-1] + "”"
+#    if startQuote == True:
+#        newParagraph = newParagraph[:len(newParagraph)-1] + "”"
+#        print(3)
     print(newParagraph)
     
 text = r"C:\Users\rolle\Dropbox\Completed Works\The Agora Files\the-agora-files-paperback1.txt"
