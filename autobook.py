@@ -48,18 +48,19 @@ def makeNewParagraph(paragraphList, wordTypeDict):
             newSentence = False
         if word in [",",".","!","?",'"',"'"]:
             newWord = word
-            newParagragh = newParagraph[:len(newParagraph)-1]
+            newParagraph = newParagraph[:len(newParagraph)-1]
+            if word in [".","!","?"]:
+                newSentence = True
             if newWord == '"':
-                startQuote = True
-                quoteSpaceRemoved = False
+                if startQuote == False:
+                    startQuote = True
+                    newParagraph += " "
+                    quoteSpaceRemoved = False
+                else:
+                    startQuote = False
 
 
-            
-#        if startQuote == True and quoteSpaceRemoved == False:
-#            newParagraph = newParagraph[:len(newParagraph)-1]
-#            print(1)
-#            quoteSpaceRemoved = True
-#            print(2)
+
 
 #            if word in [".", "!",'?']:
 #                newSentence = True
@@ -80,8 +81,8 @@ def makeNewParagraph(paragraphList, wordTypeDict):
         
 
         
-#    if startQuote == True:
-#        newParagraph = newParagraph[:len(newParagraph)-1] + "”"
+    if startQuote == True:
+        newParagraph = newParagraph[:len(newParagraph)-1] + "”"
 #        print(3)
     print(newParagraph)
     
