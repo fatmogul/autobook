@@ -52,30 +52,12 @@ def makeNewParagraph(paragraphList, wordTypeDict):
             if word in [".","!","?"]:
                 newSentence = True
             if newWord == '"':
-                if startQuote == False:
+                if startQuote == False and newSentence != True:
                     startQuote = True
                     newParagraph += " "
                     quoteSpaceRemoved = False
                 else:
                     startQuote = False
-
-
-
-
-#            if word in [".", "!",'?']:
-#                newSentence = True
-#            if word == '"':   
-#                if startQuote == False:
-#                    startQuote = True
-#                    quoteSpaceRemoved = False
-#                    newSentence = True
-#                else:
-#                    startQuote = False
-#            if newWord in ['“']:
-#                startQuote = True
-#        else:
-#           newParagraph = newParagraph + newWord + " "
-#        
         newParagraph += newWord + " "
         prevWord = newWord.lower()
         
@@ -101,7 +83,7 @@ for paragraph in paragraphs:
     thisSentence = []
     prevWord = ""
     for code in sentenceCode:
-        if code[0] not in ['na']:
+        if code[0] not in ['na',",",".","!","?",'"',"'"]:
             wordCode = code[1]
             thisWord = code[0].lower()
             if code[0] in ['“','”']:
