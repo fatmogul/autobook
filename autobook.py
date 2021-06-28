@@ -13,6 +13,7 @@ def makeNewParagraph(paragraphList, wordTypeDict):
     quoteSpaceRemoved = False
     prevWord = ""
     failedWord = False
+    print(newParagraphCode)
     for word in newParagraphCode:
         
         addWord = True
@@ -83,15 +84,15 @@ for paragraph in paragraphs:
     thisSentence = []
     prevWord = ""
     for code in sentenceCode:
-        if code[0] not in ['na',",",".","!","?",'"',"'"]:
+        if code[0] not in ['na']:
             wordCode = code[1]
             thisWord = code[0].lower()
             if code[0] in ['“','”']:
                 wordCode = '"'
                 thisWord = '"'
-            if code[0] in [',']:
-                wordCode = ','
-                thisWord = ','    
+            if code[0] in [',',".","!","?",'"',"'"]:
+                wordCode = code[0]
+                thisWord = code[0]    
             thisSentence.append(wordCode)
             if prevWord == "" or prevWord not in nextWordDict:
                 nextWordDict[prevWord] = {thisWord : 1}
@@ -105,6 +106,9 @@ for paragraph in paragraphs:
             elif thisWord not in wordTypeDict[wordCode]:
                 wordTypeDict[wordCode].append(thisWord)
             prevWord = thisWord
+        
+
+            
     paragraphList.append(thisSentence)
 
        
