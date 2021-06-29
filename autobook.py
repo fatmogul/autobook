@@ -13,13 +13,29 @@ def makeNewParagraph(paragraphList, wordTypeDict):
     quoteSpaceRemoved = False
     prevWord = ""
     failedWord = False
-    print(newParagraphCode)
+
     for word in newParagraphCode:
-        
-        addWord = True
+
+        if startQuote == True and quoteSpaceRemoved != True:
+            newParagraph = newParagraph[:len(newParagraph)-1]
+            quoteSpaceRemoved = True
+            newSentence = True
+
         if prevWord == "":
             newWord = wordTypeDict[word][random.randint(0,len(wordTypeDict[word])-1)]
-        else:
+        if word in [",",".","!","?",'"',"'"]:
+            newWord = word
+            newParagraph = newParagraph[:len(newParagraph)-1]
+            if word in [".","!","?"]:
+                newSentence = True
+            if newWord in ['"']:
+                if startQuote == False:   
+                    startQuote = True
+                    newParagraph += " "
+                    quoteSpaceRemoved = False
+                else:
+                    startQuote = False
+        elif prevWord != "":
             failedWord = False
             foundWord = False
             iterCount = 0
@@ -40,32 +56,28 @@ def makeNewParagraph(paragraphList, wordTypeDict):
                             nextWordDict[prevWord].pop(trialWord,None)
                             foundWord = True
                 iterCount += 1
-        if startQuote == True and quoteSpaceRemoved == False:
-            newParagraph = newParagraph[:len(newParagraph)-1]
-            quoteSpaceRemoved = True
-            newSentence = True
+            if newWord in [",",".","!","?",'"',"'"]:
+                newParagraph = newParagraph[:len(newParagraph)-1]
+                if newWord in [".","!","?"]:
+                    newSentence = True
+                if newWord in ['"']:
+                    if startQuote == False:   
+                        startQuote = True
+                        newParagraph += " "
+                        quoteSpaceRemoved = False
+                    else:
+                        startQuote = False
+        
         if newSentence == True:
             newWord = newWord.capitalize()
             newSentence = False
-        if word in [",",".","!","?",'"',"'"]:
-            newWord = word
-            newParagraph = newParagraph[:len(newParagraph)-1]
-            if word in [".","!","?"]:
-                newSentence = True
-            if newWord == '"':
-                if startQuote == False and newSentence != True:
-                    startQuote = True
-                    newParagraph += " "
-                    quoteSpaceRemoved = False
-                else:
-                    startQuote = False
         newParagraph += newWord + " "
         prevWord = newWord.lower()
         
 
         
-    if startQuote == True:
-        newParagraph = newParagraph[:len(newParagraph)-1] + "”"
+    if startQuote == True and prevWord != '"':
+        newParagraph = newParagraph[:len(newParagraph)-1] + '"'
 #        print(3)
     print(newParagraph)
     
@@ -112,6 +124,6 @@ for paragraph in paragraphs:
     paragraphList.append(thisSentence)
 
        
-for x in range(1,10):
+for x in range(1,5):
     makeNewParagraph(paragraphList, wordTypeDict)
 
