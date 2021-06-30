@@ -13,6 +13,7 @@ def makeNewParagraph(paragraphList, wordTypeDict):
     quoteSpaceRemoved = False
     prevWord = ""
     failedWord = False
+    nextWordNewSentence = False
 
     for word in newParagraphCode:
 
@@ -20,14 +21,13 @@ def makeNewParagraph(paragraphList, wordTypeDict):
             newParagraph = newParagraph[:len(newParagraph)-1]
             quoteSpaceRemoved = True
             newSentence = True
-
-        if prevWord == "":
-            newWord = wordTypeDict[word][random.randint(0,len(wordTypeDict[word])-1)]
+        
+        
         if word in [",",".","!","?",'"',"'"]:
             newWord = word
             newParagraph = newParagraph[:len(newParagraph)-1]
             if word in [".","!","?"]:
-                newSentence = True
+                nextWordNewSentence = True
             if newWord in ['"']:
                 if startQuote == False:   
                     startQuote = True
@@ -67,10 +67,15 @@ def makeNewParagraph(paragraphList, wordTypeDict):
                         quoteSpaceRemoved = False
                     else:
                         startQuote = False
+        else:
+            newWord = wordTypeDict[word][random.randint(0,len(wordTypeDict[word])-1)]
         
         if newSentence == True:
             newWord = newWord.capitalize()
             newSentence = False
+        if nextWordNewSentence == True:
+            newSentence = True
+            nextWordNewSentence = False
         newParagraph += newWord + " "
         prevWord = newWord.lower()
         
