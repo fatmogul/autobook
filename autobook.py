@@ -40,6 +40,7 @@ def makeNewParagraph(paragraphList, wordTypeDict):
             foundWord = False
             iterCount = 0
             while foundWord == False:
+                
                 trialWordList = list(nextWordDict[prevWord].keys())
                 if iterCount >= len(trialWordList):
                     foundWord = True
@@ -95,9 +96,44 @@ global nextWordDict
 nextWordDict = {}
 paragraphList = []
 wordTypeDict = {}
+
+#section for final tagger
+from nltk.corpus import brown
+fd = nltk.FreqDist(brown.words(categories='news'))
+cfd = nltk.ConditionalFreqDist(brown.tagged_words(categories='news'))
+most_freq_words = fd.most_common(100)
+likely_tags = dict((word, cfd[word].max()) for (word, _) in most_freq_words)
+baseline_tagger = nltk.UnigramTagger(model=likely_tags)
+
+
 for paragraph in paragraphs:
+
+    #original recipe
     tknr = TweetTokenizer()
-    sentenceCode = nltk.pos_tag(tknr.tokenize(paragraph))
+    #sentenceCode = nltk.pos_tag(tknr.tokenize(paragraph))
+
+    #default tagger, works slightly better
+    #tagger = nltk.DefaultTagger('NN')
+    #sentenceCode = tagger.tag(nltk.word_tokenize(paragraph))
+
+    #does a better job of recoginizing parts of speech
+    #patterns = [
+    # (r'.*ing$', 'VBG'),                # gerunds
+    # (r'.*ed$', 'VBD'),                 # simple past
+    # (r'.*es$', 'VBZ'),                 # 3rd singular present
+    # (r'.*ould$', 'MD'),                # modals
+    # (r'.*\'s$', 'NN$'),                # possessive nouns
+    # (r'.*s$', 'NNS'),                  # plural nouns
+    # (r'^-?[0-9]+(\.[0-9]+)?$', 'CD'),  # cardinal numbers
+    # (r'.*', 'NN')                      # nouns (default)
+# ]
+#    regexp_tagger = nltk.RegexpTagger(patterns)
+#    sentenceCode = regexp_tagger.tag(nltk.word_tokenize(paragraph))
+
+    
+    sentenceCode = baseline_tagger.tag(tknr.tokenize(paragraph))
+    
+
     thisSentence = []
     prevWord = ""
     for code in sentenceCode:
