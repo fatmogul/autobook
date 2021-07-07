@@ -84,7 +84,7 @@ def makeNewParagraph(paragraphList, wordTypeDict):
         
     if startQuote == True and prevWord != '"':
         newParagraph = newParagraph[:len(newParagraph)-1] + '"'
-#        print(3)
+
     print(newParagraph)
     
 text = r"C:\Users\rolle\Dropbox\Completed Works\The Agora Files\the-agora-files-paperback1.txt"
@@ -99,8 +99,8 @@ wordTypeDict = {}
 
 #section for final tagger
 from nltk.corpus import brown
-fd = nltk.FreqDist(brown.words(categories='news'))
-cfd = nltk.ConditionalFreqDist(brown.tagged_words(categories='news'))
+fd = nltk.FreqDist(brown.words(categories='adventure'))
+cfd = nltk.ConditionalFreqDist(brown.tagged_words(categories='adventure'))
 most_freq_words = fd.most_common(100)
 likely_tags = dict((word, cfd[word].max()) for (word, _) in most_freq_words)
 baseline_tagger = nltk.UnigramTagger(model=likely_tags)
@@ -110,25 +110,25 @@ for paragraph in paragraphs:
 
     #original recipe
     tknr = TweetTokenizer()
-    #sentenceCode = nltk.pos_tag(tknr.tokenize(paragraph))
-
+    #sentenceCodeDefault = nltk.pos_tag(tknr.tokenize(paragraph))
+    
     #default tagger, works slightly better
     #tagger = nltk.DefaultTagger('NN')
     #sentenceCode = tagger.tag(nltk.word_tokenize(paragraph))
 
     #does a better job of recoginizing parts of speech
-    #patterns = [
-    # (r'.*ing$', 'VBG'),                # gerunds
-    # (r'.*ed$', 'VBD'),                 # simple past
-    # (r'.*es$', 'VBZ'),                 # 3rd singular present
-    # (r'.*ould$', 'MD'),                # modals
-    # (r'.*\'s$', 'NN$'),                # possessive nouns
-    # (r'.*s$', 'NNS'),                  # plural nouns
-    # (r'^-?[0-9]+(\.[0-9]+)?$', 'CD'),  # cardinal numbers
-    # (r'.*', 'NN')                      # nouns (default)
-# ]
-#    regexp_tagger = nltk.RegexpTagger(patterns)
-#    sentenceCode = regexp_tagger.tag(nltk.word_tokenize(paragraph))
+    patterns = [
+     (r'.*ing$', 'VBG'),                # gerunds
+     (r'.*ed$', 'VBD'),                 # simple past
+     (r'.*es$', 'VBZ'),                 # 3rd singular present
+     (r'.*ould$', 'MD'),                # modals
+     (r'.*\'s$', 'NN$'),                # possessive nouns
+     (r'.*s$', 'NNS'),                  # plural nouns
+     (r'^-?[0-9]+(\.[0-9]+)?$', 'CD'),  # cardinal numbers
+     (r'.*', 'NN')                      # nouns (default)
+ ]
+    regexp_tagger = nltk.RegexpTagger(patterns)
+    sentenceCodeDefault = regexp_tagger.tag(tknr.tokenize(paragraph))
 
     
     sentenceCode = baseline_tagger.tag(tknr.tokenize(paragraph))
@@ -136,9 +136,13 @@ for paragraph in paragraphs:
 
     thisSentence = []
     prevWord = ""
+    i = 0
     for code in sentenceCode:
+        thisCode = code[1]
+        if code[1] is None:
+            thisCode = sentenceCodeDefault[i][1]
         if code[0] not in ['na']:
-            wordCode = code[1]
+            wordCode = thisCode
             thisWord = code[0].lower()
             if code[0] in ['“','”']:
                 wordCode = '"'
@@ -159,7 +163,7 @@ for paragraph in paragraphs:
             elif thisWord not in wordTypeDict[wordCode]:
                 wordTypeDict[wordCode].append(thisWord)
             prevWord = thisWord
-        
+        i += 1
 
             
     paragraphList.append(thisSentence)
