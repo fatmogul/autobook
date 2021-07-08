@@ -35,28 +35,9 @@ def makeNewParagraph(paragraphList, wordTypeDict):
                     quoteSpaceRemoved = False
                 else:
                     startQuote = False
-        elif prevWord != "":
-            failedWord = False
-            foundWord = False
-            iterCount = 0
-            while foundWord == False:
-                
-                trialWordList = list(nextWordDict[prevWord].keys())
-                if iterCount >= len(trialWordList):
-                    foundWord = True
-                    newWord = trialWordList[0]
-                    nextWordDict[prevWord][newWord] -= 1
-                    if nextWordDict[prevWord][newWord] == 0:
-                        nextWordDict[prevWord].pop(newWord,None)
-                else:
-                    trialWord = trialWordList[iterCount]
-                    if trialWord in wordTypeDict[word]:
-                        newWord = trialWord
-                        nextWordDict[prevWord][trialWord] -= 1
-                        if nextWordDict[prevWord][trialWord] == 0:
-                            nextWordDict[prevWord].pop(trialWord,None)
-                            foundWord = True
-                iterCount += 1
+            
+        else:
+            newWord = wordTypeDict[word][random.randint(0,len(wordTypeDict[word])-1)]
             if newWord in [",",".","!","?",'"',"'"]:
                 newParagraph = newParagraph[:len(newParagraph)-1]
                 if newWord in [".","!","?"]:
@@ -68,9 +49,6 @@ def makeNewParagraph(paragraphList, wordTypeDict):
                         quoteSpaceRemoved = False
                     else:
                         startQuote = False
-        else:
-            newWord = wordTypeDict[word][random.randint(0,len(wordTypeDict[word])-1)]
-        
         if newSentence == True:
             newWord = newWord.capitalize()
             newSentence = False
