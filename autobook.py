@@ -79,7 +79,7 @@ wordTypeDict = {}
 from nltk.corpus import brown
 fd = nltk.FreqDist(brown.words(categories='adventure'))
 cfd = nltk.ConditionalFreqDist(brown.tagged_words(categories='adventure'))
-most_freq_words = fd.most_common(100)
+most_freq_words = fd.most_common(10000)
 likely_tags = dict((word, cfd[word].max()) for (word, _) in most_freq_words)
 baseline_tagger = nltk.UnigramTagger(model=likely_tags)
 
@@ -146,7 +146,7 @@ for paragraph in paragraphs:
             
     paragraphList.append(thisSentence)
 
-       
-for x in range(1,5):
+
+for x in range(1,50):
     makeNewParagraph(paragraphList, wordTypeDict)
 
