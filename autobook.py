@@ -65,7 +65,7 @@ def makeNewParagraph(paragraphList, wordTypeDict):
 
     print(newParagraph)
     
-text = r"C:\Users\rolle\Dropbox\Completed Works\The Agora Files\the-agora-files-paperback1.txt"
+text = r"C:\Users\rolle\Dropbox\Completed Works\The Defenders Saga\Legend of Buddy Hero\buddy-hero.txt"
 
 book = open(text)
 paragraphs = book.read().splitlines()
